@@ -103,7 +103,7 @@ Poisson1D::assemble()
   std::cout << "  Assembling the linear system" << std::endl;
 
   // Number of local DoFs for each element.
-  const unsigned int dofs_per_cell = fe->dofs_per_cell;
+  const unsigned int dofs_per_cell = fe->dofs_per_cell; // n_loc
 
   // Number of quadrature points for each element.
   const unsigned int n_q = quadrature->size();
@@ -125,7 +125,7 @@ Poisson1D::assemble()
 
   // Local matrix and right-hand side vector. We will overwrite them for
   // each element within the loop.
-  FullMatrix<double> cell_matrix(dofs_per_cell, dofs_per_cell);
+  FullMatrix<double> cell_matrix(dofs_per_cell, dofs_per_cell); //Its a dense matrix
   Vector<double>     cell_rhs(dofs_per_cell);
 
   // We will use this vector to store the global indices of the DoFs of the
@@ -164,7 +164,7 @@ Poisson1D::assemble()
                   cell_matrix(i, j) += mu_loc *                     //
                                        fe_values.shape_grad(i, q) * //
                                        fe_values.shape_grad(j, q) * //
-                                       fe_values.JxW(q);
+                                       fe_values.JxW(q); // JxW is cached and cannot be computed outside the loop like mu_loc
                 }
 
               cell_rhs(i) += f_loc *                       //
